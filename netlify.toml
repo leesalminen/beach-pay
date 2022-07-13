@@ -10,7 +10,7 @@
   command = "npm run dev"
 
 [production]
-  publish = "/dist/pwa"
+  publish = "dist/pwa"
   command = "npm run build"
 
 [[redirects]]
