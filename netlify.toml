@@ -2,7 +2,7 @@
   command = "npm run build"
   functions = "src/functions"
   NODE_ENV = "16"
-  publish = "/dist"
+  publish = "/dist/pwa"
 
 [dev]
   port = 18080
@@ -10,7 +10,7 @@
   command = "npm run dev"
 
 [production]
-  publish = "dist/pwa"
+  publish = "/dist/pwa"
   command = "npm run build"
 
 [[redirects]]
