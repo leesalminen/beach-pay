@@ -58,7 +58,7 @@
                         @click="withdrawFormDialog.show = true"
                         :disable="wallet.balance == 0"
                       >
-                        New Wristband Link
+                        New Wristband
                       </q-btn>
                     </div>
                   </div>
@@ -73,8 +73,7 @@
 
                           <q-list bordered separator v-if="selectedWallet.links && selectedWallet.links.length > 0">
                             <q-item clickable v-ripple>
-                              <q-item-section side><b>Delete</b></q-item-section>
-                              <q-item-section side><b>Write</b></q-item-section>
+                              <q-item-section side><b>Actions</b></q-item-section>
                               <q-item-section><b>Name</b></q-item-section>
                               <q-item-section><b>Max Amount</b></q-item-section>
                               <q-item-section><b>Max Uses</b></q-item-section>
@@ -83,8 +82,6 @@
                             <q-item clickable v-ripple v-for="link in selectedWallet.links" :key="link.id">
                               <q-item-section side>
                                 <q-btn @click="deleteLink(link.id)" flat color="grey" class="q-ml-auto" icon="delete" />
-                              </q-item-section>
-                              <q-item-section side>
                                 <q-btn @click="writeNfc(link.lnurl)" flat color="grey" class="q-ml-auto" icon="nfc" />
                               </q-item-section>
                               <q-item-section>{{link.title}}</q-item-section>
