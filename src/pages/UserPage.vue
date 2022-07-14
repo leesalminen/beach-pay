@@ -16,7 +16,7 @@
           />
           <q-list bordered separator v-if="wallets.length > 0">
             <div v-for="(wallet, index) in wallets" :key="wallet.id">
-              <q-item clickable v-ripple @click="selectedWalletIndex = index; loadWallet()">
+              <q-item clickable v-ripple @click="selectedWalletIndex = index; loadLinks()">
                 <q-item-section>{{wallet.name}}</q-item-section>
                 <q-item-section side>
                   <div class="row" style="align-items: center;">
@@ -78,8 +78,6 @@
                             </q-item>
                             <q-item clickable v-ripple v-for="link in selectedWallet.links" :key="link.id">
                               <q-item-section side>
-                                <!-- <q-btn @click="deleteLink(link.id)" flat color="grey" class="q-ml-auto" icon="delete" />
-                                <q-btn @click="writeNfc(link.lnurl)" flat color="grey" class="q-ml-auto" icon="nfc" /> -->
                                 <q-btn @click="linkDialog.data = link; linkDialog.show = true" flat color="grey" class="q-ml-auto" icon="info" />
                               </q-item-section>
                               <q-item-section>{{link.title}}</q-item-section>
@@ -607,9 +605,18 @@ export default defineComponent({
         )
       })
       .then((res) => {
+        if(!self.links[self.selectedWallet.id]) {
+          self.links[self.selectedWallet.id] = []
+        }
+
         self.links[self.selectedWallet.id].push(res.data.data)
         self.withdrawFormDialog.show = false
         self.withdrawFormDialog.data = {}
+
+        self.$q.notify({
+          message: "Link created successfully!",
+          position: "bottom",
+        })
 
         self.writeNfc()
 
@@ -617,7 +624,7 @@ export default defineComponent({
       })
     },
 
-    loadWallet: function() {
+    loadLinks: function() {
       const wallet = this.selectedWallet
       const self = this
 
@@ -697,18 +704,17 @@ export default defineComponent({
               qrCodeDialog.dismissMsg()
               qrCodeDialog.show = false
 
-              if(formDialog.firstTime) {
-                self.$q.notify({
-                  message: "Payment received successfully!",
-                  position: "bottom",
-                })
+              self.$q.notify({
+                message: "Payment received successfully!",
+                position: "bottom",
+              })
 
+              self.loadWallets()
+
+              if(formDialog.firstTime) {
                 self.withdrawFormDialog.show = true
-              } else {
-                setTimeout(function () {
-                  window.location.reload()
-                }, 500)
               }
+            
             }
           })
         }, 3000)
@@ -722,6 +728,7 @@ export default defineComponent({
     },
 
     deleteLink: function(linkId) {
+      var self = this
       if(confirm('Are you sure you want to delete this link?')) {
         axios.post(
           window.apiBaseUrl + "/api/proxy",
@@ -737,9 +744,78 @@ export default defineComponent({
           }
         ) 
         .then(function (res) {
-          window.location.reload()
+          self.linkDialog.show = false
+          self.linkDialog.data = {}
+
+          self.$q.notify({
+            message: "Link deleted successfully!",
+            position: "bottom",
+          })
+
+          self.loadWallets()
         })
       }
+    },
+
+
+    loadWallets: function() {
+      var self = this
+
+      return axios.post(
+        window.apiBaseUrl + "/api/proxy", 
+        {
+          path: "/usermanager/api/v1/wallets/" + this.user.id,
+          method: "GET",
+          data: {
+            
+          }
+        }
+      )
+      .then(response => {
+        const wallets = response.data.data
+
+        return wallets
+      })
+      .then(wallets => {
+        let promises = []
+        wallets.forEach(wallet => {
+          promises.push(
+            axios.post(
+              window.apiBaseUrl + "/api/proxy", 
+              {
+                path: "/api/v1/wallet",
+                method: "GET",
+                headers: {
+                  "X-Api-Key": wallet.inkey,
+                },
+                data: {
+                  
+                }
+              }
+            )
+            .then(response => {
+              response.data.data = {
+                ...response.data.data,
+                ...wallet,
+              }
+
+              return response
+            })
+          )
+        })
+
+        return Promise.all(promises)
+      })
+      .then(result => {
+        this.wallets = result.map(item => item.data.data)
+
+        this.loading = false
+
+        return
+      })
+      .then(() => {
+        return this.loadLinks()
+      })
     }
 
   },
@@ -789,61 +865,7 @@ export default defineComponent({
       )
     })
     .then(() => {
-      return axios.post(
-        window.apiBaseUrl + "/api/proxy", 
-        {
-          path: "/usermanager/api/v1/wallets/" + userId,
-          method: "GET",
-          data: {
-            
-          }
-        }
-      )
-    })
-    .then(response => {
-      const wallets = response.data.data
-
-      return wallets
-    })
-    .then(wallets => {
-      let promises = []
-      wallets.forEach(wallet => {
-        promises.push(
-          axios.post(
-            window.apiBaseUrl + "/api/proxy", 
-            {
-              path: "/api/v1/wallet",
-              method: "GET",
-              headers: {
-                "X-Api-Key": wallet.inkey,
-              },
-              data: {
-                
-              }
-            }
-          )
-          .then(response => {
-            response.data.data = {
-              ...response.data.data,
-              ...wallet,
-            }
-
-            return response
-          })
-        )
-      })
-
-      return Promise.all(promises)
-    })
-    .then(result => {
-      this.wallets = result.map(item => item.data.data)
-
-      this.loading = false
-
-      return
-    })
-    .then(() => {
-      return this.loadWallet()
+      this.loadWallets()
     })
     .catch(error => {
       this.$q.notify({
