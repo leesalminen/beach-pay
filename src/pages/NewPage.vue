@@ -31,9 +31,9 @@
                     filled
                     type="password"
                     v-model="password"
-                    label="Password"
+                    label="4 Digit PIN"
                     lazy-rules
-                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                    :rules="[ val => val && val.length > 0 || 'Please type something', val => val && val.length == 4 || 'Maximum 4 digit PIN', val => val && parseInt(val) || 'Please only use numbers for your PIN' ]"
                   />
 
                   <div>
@@ -71,16 +71,16 @@
                     filled
                     type="password"
                     v-model="password"
-                    label="Password"
+                    label="4 Digit PIN"
                     lazy-rules
-                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                    :rules="[ val => val && val.length > 0 || 'Please type something', val => val && val.length == 4 || 'Maximum 4 digit PIN', val => val && parseInt(val) || 'Please only use numbers for your PIN' ]"
                   />
 
                   <q-input
                     filled
                     type="password"
                     v-model="password_confirm"
-                    label="Password (confirm)"
+                    label="4 Digit PIN (confirm)"
                     lazy-rules
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                   />
