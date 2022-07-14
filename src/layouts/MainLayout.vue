@@ -14,7 +14,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered>
       <q-list>
         <q-item-label
           header
@@ -68,7 +68,6 @@ export default defineComponent({
     const $q = useQuasar()
 
     return {
-      $q: $q,
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
