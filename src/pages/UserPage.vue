@@ -81,8 +81,9 @@
                             </q-item>
                             <q-item clickable v-ripple v-for="link in selectedWallet.links" :key="link.id">
                               <q-item-section side>
-                                <q-btn @click="deleteLink(link.id)" flat color="grey" class="q-ml-auto" icon="delete" />
-                                <q-btn @click="writeNfc(link.lnurl)" flat color="grey" class="q-ml-auto" icon="nfc" />
+                                <!-- <q-btn @click="deleteLink(link.id)" flat color="grey" class="q-ml-auto" icon="delete" />
+                                <q-btn @click="writeNfc(link.lnurl)" flat color="grey" class="q-ml-auto" icon="nfc" /> -->
+                                <q-btn @click="linkDialog.data = link; linkDialog.show = true" flat color="grey" class="q-ml-auto" icon="info" />
                               </q-item-section>
                               <q-item-section>{{link.title}}</q-item-section>
                               <q-item-section>{{link.max_withdrawable}}</q-item-section>
@@ -228,6 +229,71 @@
           @click="copyText('lightning:' + qrCodeDialog.data.payment_request, 'Invoice copied to clipboard!')"
           >Copy Invoice</q-btn
         >
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
+      v-model="linkDialog.show"
+      position="top"
+    >
+      <q-card class="q-pa-lg q-pt-xl text-center">
+        
+        <q-card-section>
+          <q-list bordered separator>
+            <q-item clickable v-ripple>
+              <q-item-section><b>Title</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.title }}</q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section><b>Max Withdrawable</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.max_withdrawable }}</q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section><b>Max Uses</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.uses }}</q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section><b>Wait Time</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.wait_time }} seconds</q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section><b>Times Used</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.used }}</q-item-section>
+            </q-item>
+
+          </q-list>
+
+          
+        </q-card-section>
+        
+        <q-card-section>
+          <q-btn
+            outline
+            color="grey"
+            @click="copyText(linkDialog.data.lnurl, 'Link copied to clipboard!')"
+            icon="content_copy"
+            >Copy Link</q-btn
+          >
+          <q-btn
+            outline
+            color="grey"
+            @click="writeNfc(linkDialog.data.lnurl)"
+            icon="nfc"
+            >Write to NFC</q-btn
+          >
+          <q-btn
+            outline
+            color="red"
+            @click="deleteLink(linkDialog.data.id)"
+            icon="delete"
+            >Delete Wristband</q-btn
+          >
+
+        </q-card-section>
       </q-card>
     </q-dialog>
 
@@ -448,6 +514,12 @@ export default defineComponent({
         },
         show: false,
       },
+      linkDialog: {
+        data: {
+
+        },
+        show: false,
+      }
     }
   },
 
