@@ -520,7 +520,7 @@ export default defineComponent({
       })
       .then((max_withdrawable) => {
         return axios.post(
-          "https://beach-pay.netlify.app/api/proxy",
+          window.apiBaseUrl + "/api/proxy",
           {
             path: "/withdraw/api/v1/links",
             data: {
@@ -555,7 +555,7 @@ export default defineComponent({
       const self = this
 
       return axios.post(
-        "https://beach-pay.netlify.app/api/proxy",
+        window.apiBaseUrl + "/api/proxy",
         {
           path: "/withdraw/api/v1/links",
           data: {
@@ -583,7 +583,7 @@ export default defineComponent({
       const walletInkey = this.selectedWallet.inkey
 
       return axios.post(
-        "https://beach-pay.netlify.app/api/proxy", 
+        window.apiBaseUrl + "/api/proxy", 
         {
           path: "/api/v1/payments",
           method: "POST",
@@ -612,7 +612,7 @@ export default defineComponent({
 
         qrCodeDialog.paymentChecker = setInterval(function () {
           axios.post(
-            "https://beach-pay.netlify.app/api/proxy",
+            window.apiBaseUrl + "/api/proxy",
             {
               path: "/api/v1/payments/" + qrCodeDialog.data.payment_hash,
               method: "GET",
@@ -657,7 +657,7 @@ export default defineComponent({
     deleteLink: function(linkId) {
       if(confirm('Are you sure you want to delete this link?')) {
         axios.post(
-          "https://beach-pay.netlify.app/api/proxy",
+          window.apiBaseUrl + "/api/proxy",
           {
             path: "/withdraw/api/v1/links/" + linkId,
             method: "DELETE",
@@ -687,7 +687,7 @@ export default defineComponent({
     }
 
     return axios.post(
-      "https://beach-pay.netlify.app/api/proxy", 
+      window.apiBaseUrl + "/api/proxy", 
       {
         path: "/usermanager/api/v1/users/" + userId,
         method: "GET",
@@ -706,7 +706,7 @@ export default defineComponent({
     })
     .then(() => {
       return axios.post(
-        "https://beach-pay.netlify.app/api/proxy", 
+        window.apiBaseUrl + "/api/proxy", 
         {
           path: "/extensions?usr=" + userId + "&enable=withdraw",
           method: "GET",
@@ -718,7 +718,7 @@ export default defineComponent({
     })
     .then(() => {
       return axios.post(
-        "https://beach-pay.netlify.app/api/proxy", 
+        window.apiBaseUrl + "/api/proxy", 
         {
           path: "/usermanager/api/v1/wallets/" + userId,
           method: "GET",
@@ -738,7 +738,7 @@ export default defineComponent({
       wallets.forEach(wallet => {
         promises.push(
           axios.post(
-            "https://beach-pay.netlify.app/api/proxy", 
+            window.apiBaseUrl + "/api/proxy", 
             {
               path: "/api/v1/wallet",
               method: "GET",
