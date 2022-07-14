@@ -137,7 +137,7 @@ export default defineComponent({
       const self = this
 
       axios.post(
-        "http://localhost:18080/.netlify/functions/login", 
+        "https://beach-pay.netlify.app/api/login", 
         {
           email: this.email,
           password: this.password, 
@@ -181,7 +181,7 @@ export default defineComponent({
       const walletName = userName + "-wallet-" + makeid(8)
 
       axios.post(
-        "http://localhost:18080/.netlify/functions/register", 
+        "https://beach-pay.netlify.app/api/register", 
         {
           user_name: userName,
           wallet_name: walletName,
