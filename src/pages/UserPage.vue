@@ -764,6 +764,11 @@ export default defineComponent({
       }
     )
     .then(response => {
+      if(!response.data.success) {
+        this.$router.push('/new')
+        throw "User record not found"
+      }
+
       const user = response.data.data
 
       return user

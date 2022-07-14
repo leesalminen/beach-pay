@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card class="my-card">
       <q-card-section>
-        <p><b>New Wristband</b></p>
+        <p><b>Login</b></p>
 
         <q-list bordered separator>
           <q-expansion-item
