@@ -547,6 +547,8 @@ export default defineComponent({
         self.withdrawFormDialog.show = false
         self.withdrawFormDialog.data = {}
 
+        self.writeNfc()
+
         return
       })
     },
@@ -632,6 +634,11 @@ export default defineComponent({
               qrCodeDialog.show = false
 
               if(formDialog.firstTime) {
+                self.$q.notify({
+                  message: "Payment received successfully!",
+                  position: "bottom",
+                })
+
                 self.withdrawFormDialog.show = true
               } else {
                 setTimeout(function () {
