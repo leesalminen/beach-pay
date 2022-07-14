@@ -11,49 +11,42 @@ exports.handler = async function (event, context) {
     }
   }
 
-  if(!event.body) {
-    return getError('Invalid body')
+  event.body = JSON.parse(event.body)
+
+  const email = event.body.email
+  const password = event.body.password
+
+  if(!email) {
+    return getError('Invalid email')
   }
 
-  const data = JSON.parse(event.body)
-
-  if(!data) {
-    return getError('Invalid body')
-  }
-
-  if(!data.method) {
-    return getError('Missing method')
-  }
-
-  if(!data.path) {
-    return getError('Missing path')
-  }
-
-  if(data.data.admin_id) {
-    data.data.admin_id = adminId
-  }
-
-  if(!data.headers) {
-    data.headers = {
-      "X-Api-Key": apiKey,
-    }
+  if(!password) {
+    return getError('No password provided')
   }
 
   try {
     const response = await axios({
-      method: data.method,
-      url: baseUrl + data.path,
-      data: data.data,
-      headers: data.headers,
+      method: "GET",
+      url: baseUrl + "/usermanager/api/v1/users",
+      headers: {
+        "X-Api-Key": apiKey,
+      },
     })
+
+    const user = response.data.find(el => el.email.toLowerCase().trim() === email.toLowerCase().trim() && el.password === password)
+
+    if(!user) {
+      throw "Username or password incorrect"
+    }
+
+    delete user.password
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
         error: false,
-        status: response.status,
-        data: response.data,
+        data: user,
       }),
     }
   } catch (err) {

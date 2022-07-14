@@ -40,6 +40,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import { useQuasar } from 'quasar'
 
 const linksList = [
   {
@@ -64,12 +65,15 @@ export default defineComponent({
   setup () {
     const leftDrawerOpen = ref(false)
 
+    const $q = useQuasar()
+
     return {
+      $q: $q,
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      },
     }
   }
 })

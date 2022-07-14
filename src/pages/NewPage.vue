@@ -14,7 +14,7 @@
             <q-item-section>
               <div class="q-pa-md" style="max-width: 400px">
                 <q-form
-                  @submit="onSubmit"
+                  @submit="onLogin"
                   @reset="onReset"
                   class="q-gutter-md"
                 >
@@ -54,7 +54,7 @@
             <q-item-section>
               <div class="q-pa-md" style="max-width: 400px">
                 <q-form
-                  @submit="onSubmit"
+                  @submit="onRegister"
                   @reset="onReset"
                   class="q-gutter-md"
                 >
@@ -102,8 +102,115 @@
 
 <script>
 import { defineComponent } from 'vue'
+const axios = require('axios')
+
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
 
 export default defineComponent({
-  name: 'NewPage'
+  name: 'NewPage',
+  
+  data: function() {
+    return {
+      email: null,
+      password: null,
+      password_confirm: null,
+    }
+  },
+  methods: {
+    onReset: function() {
+      this.email = null
+      this.password = null
+      this.password_confirm = null
+    },
+    onLogin: function(e) {
+      e.preventDefault()
+
+      const self = this
+
+      axios.post(
+        "http://localhost:18080/.netlify/functions/login", 
+        {
+          email: this.email,
+          password: this.password, 
+        }
+      )
+      .then(response => {
+        if(!response.data.success) {
+          throw response.data.message
+        }
+
+        const user = response.data.data
+
+        return user
+      })
+      .then(user => {
+        console.log('user', user)
+        this.$router.push('/user/' + user.id)
+      })
+      .catch(error => {
+        this.$q.notify({
+          message: error,
+          position: "bottom"
+        })
+      })
+
+    },
+    onRegister: function(e) {
+      e.preventDefault()
+
+      const self = this
+
+      if(this.password !== this.password_confirm) {
+        this.$q.notify({
+          message: "Passwords do not match",
+          position: "bottom"
+        })
+        return false
+      }
+
+      const userName = "user-" + makeid(8)
+      const walletName = userName + "-wallet-" + makeid(8)
+
+      axios.post(
+        "http://localhost:18080/.netlify/functions/register", 
+        {
+          user_name: userName,
+          wallet_name: walletName,
+          admin_id: "REPLACE_ME",
+          email: this.email,
+          password: this.password,
+        }
+      )
+      .then(response => {
+        if(!response.data.success) {
+          throw response.data.message
+        }
+
+        const user = response.data.data
+
+        return user
+      })
+      .then(user => {
+        console.log('registered user', user)
+        this.$router.push('/user/' + user.id)
+      })
+      .catch(error => {
+        this.$q.notify({
+          message: error,
+          position: "bottom"
+        })
+      })
+
+    }
+  }
 })
 </script>
