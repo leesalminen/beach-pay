@@ -239,18 +239,18 @@
             </q-item>
 
             <q-item clickable v-ripple>
-              <q-item-section><b>Max Withdrawable</b></q-item-section>
+              <q-item-section><b>Max Per Transaction</b></q-item-section>
               <q-item-section style="word-break: break-all">{{ linkDialog.data.max_withdrawable }}</q-item-section>
             </q-item>
 
             <q-item clickable v-ripple>
-              <q-item-section><b>Max Uses</b></q-item-section>
-              <q-item-section style="word-break: break-all">{{ linkDialog.data.uses }}</q-item-section>
+              <q-item-section><b>Wait Time Between Transaction</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.wait_time }} seconds</q-item-section>
             </q-item>
 
             <q-item clickable v-ripple>
-              <q-item-section><b>Wait Time</b></q-item-section>
-              <q-item-section style="word-break: break-all">{{ linkDialog.data.wait_time }} seconds</q-item-section>
+              <q-item-section><b>Total Uses</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.uses }}</q-item-section>
             </q-item>
 
             <q-item clickable v-ripple>
@@ -258,9 +258,11 @@
               <q-item-section style="word-break: break-all">{{ linkDialog.data.used }}</q-item-section>
             </q-item>
 
+            <q-item clickable v-ripple>
+              <q-item-section><b>Uses Remaining</b></q-item-section>
+              <q-item-section style="word-break: break-all">{{ linkDialog.data.uses - linkDialog.data.used }}</q-item-section>
+            </q-item>
           </q-list>
-
-          
         </q-card-section>
         
         <q-card-section>
