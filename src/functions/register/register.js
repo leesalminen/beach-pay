@@ -55,7 +55,7 @@ exports.handler = async function (event, context) {
       headers: {
         "X-Api-Key": apiKey,
       },
-      body: {
+      data: {
         user_name: userName,
         wallet_name: walletName,
         admin_id: adminId,
