@@ -40,9 +40,9 @@
               <q-item v-if="wallet.id == selectedWallet.id">
                 <q-item-section>
                   
-                  <div class="row justify-center">
+                  <div class="row">
                     
-                    <div class="col-4">
+                    <div class="col-sm-4">
                       <q-btn
                         unelevated
                         color="primary"
@@ -51,7 +51,7 @@
                         New Deposit
                       </q-btn>
                     </div>
-                    <div class="col-4">
+                    <div class="col-sm-4">
                       <q-btn
                         unelevated
                         color="secondary"
