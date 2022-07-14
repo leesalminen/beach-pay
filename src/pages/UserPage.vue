@@ -75,9 +75,6 @@
                             <q-item clickable v-ripple>
                               <q-item-section side><b>Actions</b></q-item-section>
                               <q-item-section><b>Name</b></q-item-section>
-                              <q-item-section><b>Max Amount</b></q-item-section>
-                              <q-item-section><b>Max Uses</b></q-item-section>
-                              <q-item-section><b>Wait Time</b></q-item-section>
                             </q-item>
                             <q-item clickable v-ripple v-for="link in selectedWallet.links" :key="link.id">
                               <q-item-section side>
@@ -86,10 +83,6 @@
                                 <q-btn @click="linkDialog.data = link; linkDialog.show = true" flat color="grey" class="q-ml-auto" icon="info" />
                               </q-item-section>
                               <q-item-section>{{link.title}}</q-item-section>
-                              <q-item-section>{{link.max_withdrawable}}</q-item-section>
-                              <q-item-section>{{link.uses}}</q-item-section>
-                              <q-item-section>{{link.wait_time}}</q-item-section>
-                              
                             </q-item>
                           </q-list>
 
