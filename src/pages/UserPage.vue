@@ -542,7 +542,9 @@ export default defineComponent({
         })
 
 
-        await ndef.write(lnurl);
+        await ndef.write({
+          records: [{recordType: 'url', data: 'lightning:' + lnurl, lang: 'en'}]
+        })
         
         this.$q.notify({
           message: "Write successful!",
