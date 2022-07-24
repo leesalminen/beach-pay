@@ -24,6 +24,14 @@ const routes = [
     ]
   },
 
+  {
+    path: '/user/:id/:wallet/atm',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AtmPage.vue') }
+    ]
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

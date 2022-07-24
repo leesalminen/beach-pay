@@ -29,6 +29,15 @@
                       </q-btn>
                     </div>
                     <div class="col">
+                      <q-btn
+                        unelevated
+                        icon="money"
+                        @click="$router.push('/user/' + user.id + '/' + wallet.id + '/atm')"
+                        :disable="wallet.balance == 0"
+                      >
+                      </q-btn>
+                    </div>
+                    <div class="col">
                       <q-badge color="green" style="font-size: 16px; padding: 5px;">
                         <b>{{parseInt(wallet.balance / 1000)}} sats</b>
                       </q-badge>
